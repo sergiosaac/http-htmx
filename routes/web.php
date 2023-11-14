@@ -19,10 +19,9 @@ use App\Models\Host;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('http');
 });
 
-//main
 Route::get('/http/{id?}', function (Request $request, $id = null) {
 
     $hosts = Host::all();
@@ -95,13 +94,11 @@ Route::post('/response', function (Request $request) {
     ]);
 });
 
-
-//admin
 Route::get('/admin_host', function () {
     
     $hosts = Host::all();
     
-    return view('admin_host',
+    return view('hosts/admin_host',
         ['hosts' => $hosts]
     );
 });
@@ -110,7 +107,7 @@ Route::get('/admin_url/{id?}', function ($id = null) {
 
     if ($id) {
         $url = Url::find($id);
-        return view('admin_url__update',
+        return view('urls/admin_url__update',
             [
                 'url' => $url
             ]);
@@ -122,7 +119,7 @@ Route::get('/create_url/{id?}', function ($id = null) {
     if ($id) {
         $host = Host::find($id);
         return view(
-            'admin_url',
+            'urls/admin_url',
             ['host' => $host]
         );
     }
@@ -140,7 +137,7 @@ Route::patch('/url/{id}', function (Request $request, $id) {
     
     $host_selected = Host::find($url->host->id);
     $urls = $host_selected->urls;
-    return view('url_list',['urls' => $urls]);
+    return view('urls/url_list',['urls' => $urls]);
 });
 
 Route::post('/url', function (Request $request) {
@@ -188,9 +185,8 @@ Route::delete('/url/{id}/{host_id}', function ($id, $host_id) {
     );
 });
 
-//components
 Route::get('/url_list/{id?}', function ($id = null) {
     $host_selected = Host::find($id);
     $urls = $host_selected->urls;
-    return view('url_list',['urls' => $urls]);    
+    return view('urls/url_list',['urls' => $urls]);    
 });

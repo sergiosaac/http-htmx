@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contenedores Rojo y Azul con Campos</title>
+    <title>http - htmx</title>
     <style>
         body {
             margin: 0;
@@ -15,6 +15,8 @@
             font-family: system-ui;
             /* font-family: Georgia, serif; */
             font-size:15px;
+
+            padding:20px;
         }
 
         .contenedor-rojo {
@@ -64,16 +66,16 @@
             align-items: center;
         }
 
-        .request span {
+        .request span, .host_list span {
             font-size: 12px;
             margin-left: 10px;
         }
 
-        .request span.edit {
+        .request span.edit, .edit  {
             color: green;
         }
 
-        .request span.del {
+        .request span.del, .del {
             color: red;
         }
 
@@ -117,29 +119,75 @@
             transition:0.1s;
         }
 
+        .edit, .del {
+            margin-top:2px;
+            margin-bottom:2px;
+            padding:4px;
+            background-color:white;
+            /* border: 2px solid #f0f0f0; */
+            border-radius: 10px 10px 10px 10px;
+            -webkit-border-radius: 10px 10px 10px 10px;
+            -moz-border-radius: 10px 10px 10px 10px;
+            transition:0.1s;
+        }
+
         .adders:hover{
             background-color:#E4E5E6;
             /* opacity: 0.4; */
             /* color:white; */
         }
 
+        .edit:hover{
+            background-color:#E4E5E6;
+        }
+
+        .del:hover{
+            background-color:#E4E5E6;
+        }
+
         hr {
             opacity: 0.3;
         }
 
-
-
     </style>
-
     <script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <div class="contenedor-rojo">
-        <h2 style="color:#00d061;" >REQUEST</h2>
+        
+        <h2 style="color:#00d061;" >
+            
+            REQUEST
 
-        <br>
-        <br>
+            @if ($host_selected->port == 80)
+                <strong style="color:black; font-size:13px;" >
+                    for 
+                    <span 
+                        hx-trigger="click" 
+                        hx-get="/http/{{ $host_selected->id }}"
+                        hx-swap="outerHTML"
+                        hx-target="body"
+                        style="color:#004d92 !important;">
+                        {{ $host_selected->host }}
+                    </span>
+                </strong>
+            @else
+                <strong style="color:black; font-size:13px;" >
+                    for
+                    <span 
+                        hx-trigger="click" 
+                        hx-get="/http/{{ $host_selected->id }}"
+                        hx-swap="outerHTML"
+                        hx-target="body"
+                        style="color:#004d92 !important;">
+                        {{ $host_selected->host.':'.$host_selected->port }}
+                    </span>
+
+                </strong>
+            @endif
+
+        </h2>
 
         <button 
             class="adders"
@@ -148,96 +196,45 @@
             admin host
         </button>
         
-        <select id="opciones" name="opciones">
-            <option value="opcion1">10.118.1.57</option>
-            <option value="opcion2">localhost:8080</option>
+        <select
+            name="host"
+            hx-get="/http"
+            hx-trigger="change"
+            hx-swap="outerHTML"
+            hx-target="body">
+
+            @foreach ($hosts as $host)
+                <option 
+                    value="{{ $host->id }}"
+                    <?php if ($host_selected->id == $host->id) echo 'selected'; ?>
+                    >
+                    
+                    @if ($host->port == 80)
+                        {{ $host->host }}
+                    @else
+                        {{ $host->host.':'.$host->port }}
+                    @endif
+                    
+                </option>
+            @endforeach
+        
         </select>
 
         <hr/>
 
         <button 
             class="adders"
-            hx-get="/admin_url"
+            hx-get="/create_url/{{ $host_selected->id }}"
             hx-target=".contenedor-azul">
-            admin url
+            + url
         </button>
 
         <input type="text" placeholder="buscar..." id="campo1" name="campo1">
 
-        <div class="lista-requets">
-            
-            <div class="request">
-
-                <form action="/response" method="POST">
-                    <input type="hidden" name="protocolo" value="http">
-                    <input type="hidden" name="host" value="homebanking-cms-gc-php-bonus-test.apps.ocpconti.visionbanco.com">
-                    <input type="hidden" name="method" value="get">
-                    <input type="hidden" name="port" value="80">
-                    <input type="hidden" name="url" value="/api/category">
-                    <input type="hidden" name="header" value='{"Accept":"application/json","Authorization":"Bearer fjC3hbbcMvzsdFNJQvJcy95gpp1j47eFb8zMsIbM"}'>
-                    <input type="hidden" name="input" value="{}">
-                    @csrf
-                    <a 
-                        href="/servicios"
-                        hx-post="/response" 
-                        hx-target=".contenedor-azul">
-                        <strong style="color:#004d92;">
-                            GET -
-                        </strong>
-                        /category
-                    </a>
-                </form>
-                <span 
-                    class="edit"
-                    hx-get="/admin_url"
-                    hx-target=".request-detail">
-                    edit
-                </span>
-                <span class="del">del</span>
-            </div>
-
-            <div class="request-detail">
-            </div>
-            
+        <div id="url_list">
+            @include('url_list')
         </div>
-
-        <div class="lista-requets">
-            
-            <div class="request">
-
-                <form action="/response" method="POST">
-                    <input type="hidden" name="protocolo" value="http">
-                    <input type="hidden" name="host" value="homebanking-cms-gc-php-bonus-test.apps.ocpconti.visionbanco.com">
-                    <input type="hidden" name="method" value="get">
-                    <input type="hidden" name="port" value="80">
-                    <input type="hidden" name="url" value="/api/category/2">
-                    <input type="hidden" name="header" value='{"Accept":"application/json","Authorization":"Bearer fjC3hbbcMvzsdFNJQvJcy95gpp1j47Fb8zMsIbM"}'>
-                    <input type="hidden" name="input" value="{}">
-                    @csrf
-                    <a 
-                        href="/servicios"
-                        hx-post="/response" 
-                        hx-target=".contenedor-azul">
-                        <strong style="color:#004d92;">
-                            GET -
-                        </strong>
-                        /category/2
-                    </a>
-                </form>
-                <span 
-                    class="edit"
-                    hx-get="/admin_url"
-                    hx-target=".request-detail">
-                    edit
-                </span>
-                <span class="del">del</span>
-            </div>
-
-            <div class="request-detail">
-            </div>
-            
-        </div>
-
+        
     </div>
 
     <div class="contenedor-azul">

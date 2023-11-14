@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
+use App\Models\Url;
+use App\Models\Host;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,59 +22,175 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//main
+Route::get('/http/{id?}', function (Request $request, $id = null) {
 
-Route::get('/http', function () {
-    return view('http');
+    $hosts = Host::all();
+
+    if ($request->host) {
+        $host_selected = Host::find($request->host);
+    } elseif($id) {
+        $host_selected = Host::find($id);
+    } else {
+        $host_selected = Host::find(1);
+    }
+
+    $urls = $host_selected->urls;
+    
+    return view('http',
+        [
+            'urls' => $urls,
+            'hosts' => $hosts,
+            'host_selected' => $host_selected
+        ]
+    );
 });
-
 
 Route::post('/response', function (Request $request) {
 
     $http = [];
-    $http['url'] = $request->protocolo.'://'.$request->host.':'.$request->port.$request->url;
-    $http['method'] = $request->method;
+
+    if ($request->port == 80) {
+        $http['url'] = $request->protocolo.'://'.$request->host.$request->url;
+    } else {
+        $http['url'] = $request->protocolo.'://'.$request->host.':'.$request->port.$request->url;
+    }
+
+    $http['method'] = strtolower($request->method);
 
     switch ($http['method']) {
         case "get":
             $response = Http::withHeaders(json_decode($request->header,true))->get($http['url']);
             break;
         case "post":
-            echo "Your favorite color is blue!";
+            $response = Http::withHeaders(json_decode($request->header,true))->post($http['url'],json_decode($request->input,true));
             break;
         case "patch":
-            echo "Your favorite color is green!";
+            //$response = Http::withHeaders(json_decode($request->header,true))->patch($http['url'],json_decode($request->input,true));
             break;
         case "put":
-            echo "Your favorite color is green!";
+            //$response = Http::withHeaders(json_decode($request->header,true))->put($http['url'],json_decode($request->input,true));
             break;
         case "delete":
-            echo "Your favorite color is green!";
+            $response = Http::withHeaders(json_decode($request->header,true))->delete($http['url']);
             break;
         default:
-            echo "Your favorite color is neither red, blue, nor green!";
+            echo "WTF";
     }
 
     $data = json_decode($response, true);
-    $body = json_encode($data, JSON_PRETTY_PRINT);
+
+    if ($data) {
+        $data = json_encode($data, JSON_PRETTY_PRINT);
+    } else {
+        $data = $response;
+    }
     
     return view(
         'response',[
         'method' => $http['method'],
         'url' => $http['url'],
         'response' => $response,
-        'body' => $body
+        'body' => $data
     ]);
 });
 
+
+//admin
 Route::get('/admin_host', function () {
-    return view('admin_host');
+    
+    $hosts = Host::all();
+    
+    return view('admin_host',
+        ['hosts' => $hosts]
+    );
 });
 
 Route::get('/admin_url/{id?}', function ($id = null) {
 
     if ($id) {
-        return view('admin_url__update');
-    } else {
-        return view('admin_url');
+        $url = Url::find($id);
+        return view('admin_url__update',
+            [
+                'url' => $url
+            ]);
     }
+});
+
+Route::get('/create_url/{id?}', function ($id = null) {
+
+    if ($id) {
+        $host = Host::find($id);
+        return view(
+            'admin_url',
+            ['host' => $host]
+        );
+    }
+});
+
+Route::patch('/url/{id}', function (Request $request, $id) {
+
+    $url = Url::find($id);
+    
+    $url->method = strtolower($request->method);
+    $url->url = $request->url;
+    $url->header = $request->header;
+    $url->input = $request->input;
+    $url->save();
+    
+    $host_selected = Host::find($url->host->id);
+    $urls = $host_selected->urls;
+    return view('url_list',['urls' => $urls]);
+});
+
+Route::post('/url', function (Request $request) {
+
+    $url = new Url();
+    
+    $url->method = strtolower($request->method);
+    $url->url = $request->url;
+    $url->header = $request->header;
+    $url->input = $request->input;
+    $url->host_id = $request->host_id;
+    $url->save();
+    
+    // $host_selected = Host::find($url->host->id);
+    // $urls = $host_selected->urls;
+    // return view('url_list',['urls' => $urls]);
+
+    $host_selected = Host::find($request->host_id);
+    $urls = $host_selected->urls;
+    $hosts = Host::all();
+    
+    return view('http',
+        [
+            'urls' => $urls,
+            'hosts' => $hosts,
+            'host_selected' => $host_selected
+        ]
+    );
+});
+
+Route::delete('/url/{id}/{host_id}', function ($id, $host_id) {
+    
+    $url = Url::find($id);
+    $url->delete();
+    $host_selected = Host::find($host_id);
+    $urls = $host_selected->urls;
+    $hosts = Host::all();
+    
+    return view('http',
+        [
+            'urls' => $urls,
+            'hosts' => $hosts,
+            'host_selected' => $host_selected
+        ]
+    );
+});
+
+//components
+Route::get('/url_list/{id?}', function ($id = null) {
+    $host_selected = Host::find($id);
+    $urls = $host_selected->urls;
+    return view('url_list',['urls' => $urls]);    
 });

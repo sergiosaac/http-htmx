@@ -1,23 +1,21 @@
 <div id="admin_host">
 
-    <h2 style="color:#004d92;">Hosts</h2>
-
-    <div style="opacity:0.8; background-color:#f8f8f8; padding:15px;" class="request-detail">
-
-        <label for="campo4">Protocolo:</label>
-        <select id="opciones" name="opciones">
-            <option value="http">http</option>
-            <option value="https">https</option>
-        </select>
-
-        <label for="campo3">host:</label>
-        <input type="text" id="host" name="host">
-
-        <label for="campo3">port:</label>
-        <input type="text" id="port" name="port">
-
-    </div>
+    <p style="color:#004d92;">my HOSTs</p>
+    
+    @foreach($hosts as $host)
+        <p class="host_list">
+            {{ $host->host }}
+            <span 
+                class="edit"
+                hx-get="/admin_url"
+                hx-target=".request-detail">
+                edit
+            </span>
+            
+            <span class="del">del</span>
+        </p>
+    @endforeach
 
     <button class="adders" > agregar </button>
-
+    
 </div>

@@ -7,3 +7,43 @@
     <li><strong>Transfer-Encoding:</strong> chunked</li>
     <li><strong>Content-Type:</strong> application/json</li>
     <li><strong>Connection:</strong> close</li> -->
+
+
+
+
+    <div class="lista-requets">
+                
+                <div class="request">
+
+                    <form action="/response" method="POST">
+                        <input type="hidden" name="protocolo" value="http">
+                        <input type="hidden" name="host" value="homebanking-cms-gc-php-bonus-test.apps.ocpconti.visionbanco.com">
+                        <input type="hidden" name="method" value="get">
+                        <input type="hidden" name="port" value="80">
+                        <input type="hidden" name="url" value="/api/category">
+                        <input type="hidden" name="header" value='{"Accept":"application/json","Authorization":"Bearer fjC3hbbcMvzsdFNJQvJcy95gpp1j47eFb8zMsIbM"}'>
+                        <input type="hidden" name="input" value="{}">
+                        @csrf
+                        <a 
+                            href="/servicios"
+                            hx-post="/response" 
+                            hx-target=".contenedor-azul">
+                            <strong style="color:#004d92;">
+                                GET -
+                            </strong>
+                            /category
+                        </a>
+                    </form>
+                    <span 
+                        class="edit"
+                        hx-get="/admin_url"
+                        hx-target=".request-detail">
+                        edit
+                    </span>
+                    <span class="del">del</span>
+                </div>
+
+                <div class="request-detail">
+                </div>
+                
+            </div>

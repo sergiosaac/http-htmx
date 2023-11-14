@@ -1,26 +1,47 @@
 <div id="admin_url">
 
-    <h2 style="color:#004d92;">URLs</h2>
+    <p style="color:#004d92;">new URL for <strong>{{ $host['host'] }}:{{ $host['port'] }}</strong></p>
 
     <div style="opacity:0.8; background-color:#f8f8f8; padding:15px;" class="request-detail">
 
-        <label for="campo4">Method:</label>
-        <select id="opciones" name="opciones">
-            <option value="POST">POST</option>
-            <option value="GET">GET</option>
-            <option value="PUT">PUT</option>
-            <option value="PATCH">PATCH</option>
-            <option value="DELETE">DELETE</option>
-        </select>
+        <form action="/url" method="POST">
 
-        <label for="campo3">Headers:</label>
-        <textarea id="campo3" name="campo3"></textarea>
+            <label for="method">Method:</label>
+            <select id="method" name="method">
+                <option value="post">POST</option>
+                <option value="get">GET</option>
+                <option value="put">PUT</option>
+                <option value="patch">PATCH</option>
+                <option value="delete">DELETE</option>
+            </select>
 
-        <label for="campo3">Inputs:</label>
-        <textarea id="campo3" name="campo3"></textarea>
+            <input type="text" name="url">
+            <input type="hidden" name="host_id" value="{{ $host['id'] }}">
 
+            <label for="header">Headers:</label>
+            <textarea id="header" name="header"></textarea>
+
+            <label for="input">Inputs:</label>
+            <textarea id="input" name="input"></textarea>
+
+            @csrf
+
+            <button 
+                hx-post="/url"
+                hx-target="body"
+                class="adders">
+                guardar
+            </button>
+
+            <button
+                class="adders"
+                hx-trigger="click" 
+                hx-get="/http/{{ $host['id'] }}"
+                hx-target="body">
+                cerrar
+            </button>
+
+        </form>
     </div>
-
-    <button class="adders" > agregar </button>
-
 </div>
+

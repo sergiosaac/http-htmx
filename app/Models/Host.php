@@ -17,9 +17,9 @@ class Host extends Model
     public function host_print()
     {   
         if ($this->port == 80) {
-            return $this->host;
+            return $this->protocolo.'://'.$this->host;
         } else {
-            return $this->host.':'.$this->port;
+            return $this->protocolo.'://'.$this->host.':'.$this->port;
         }
     }
 }

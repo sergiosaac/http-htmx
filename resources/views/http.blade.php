@@ -29,13 +29,13 @@
 
         <button 
             class="adders"
-            hx-get="/admin_host"
+            hx-get="/xhosts"
             hx-target=".contenedor-azul">
             admin host
         </button>
 
         <div id="host_list">
-            @include('hosts/host_list')
+            @include('host_list')
         </div>
 
         <hr/>
@@ -47,10 +47,10 @@
             + url
         </button>
 
-        <input type="text" placeholder="buscar..." id="campo1" name="campo1">
+        <!-- <input type="text" placeholder="buscar..." id="campo1" name="campo1"> -->
 
         <div id="url_list">
-            @include('urls/url_list')
+            @include('url_list')
         </div>
         
     </div>

@@ -30,7 +30,7 @@
             
             <span 
                 class="edit"
-                hx-get="/admin_url/{{ $url->id }}"
+                hx-get="/url/{{ $url->id }}"
                 hx-target=".request-detail_{{ $url->id }}">
                 edit
             </span>
@@ -46,7 +46,6 @@
         </div>
 
         <div class="request-detail_{{ $url->id }}">
-
         </div>
         
     </div>

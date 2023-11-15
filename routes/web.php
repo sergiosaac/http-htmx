@@ -17,7 +17,7 @@ use App\Models\Host;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+//main
 Route::get('/', function () {
     return redirect('http');
 });
@@ -94,16 +94,60 @@ Route::post('/response', function (Request $request) {
     ]);
 });
 
-Route::get('/admin_host', function () {
+
+//resources
+Route::get('/xhosts', function () {
     
     $hosts = Host::all();
-    
-    return view('hosts/admin_host',
-        ['hosts' => $hosts]
-    );
+    return view('hosts/hosts',['hosts' => $hosts]);
 });
 
-Route::get('/admin_url/{id?}', function ($id = null) {
+Route::get('/xhosts/{id}', function ($id) {
+
+    return view('hosts/update',['host' => Host::find($id)]);
+});
+
+Route::post('/xhost', function (Request $request) {
+    
+    $host = new Host();
+    $host->protocolo = $request->protocolo;
+    $host->host = $request->host;
+    $host->port = $request->port;
+    $host->save();
+    
+    return redirect('xhosts');
+});
+
+Route::patch('/xhost/{id}', function (Request $request, $id) {
+    
+    $host = Host::find($id);
+    $host->protocolo = $request->protocolo;
+    $host->host = $request->host;
+    $host->port = $request->port;
+    $host->save();
+    
+    //redirect http res cod WTF!!
+    $hosts = Host::all();
+    return view('hosts/hosts',['hosts' => $hosts]);
+});
+
+Route::delete('/xhosts/{id}', function ($id) {
+    
+    $host = Host::with('urls')->find($id);
+    $host->urls()->delete();
+    $host->delete();
+    
+    //redirect http res cod WTF!!
+    $hosts = Host::all();
+    return view('hosts/hosts',['hosts' => $hosts]);
+});
+
+Route::get('/xhosts-create', function () {
+    
+    return view('hosts/create');
+});
+
+Route::get('/url/{id?}', function ($id = null) {
 
     if ($id) {
         $url = Url::find($id);
@@ -168,6 +212,12 @@ Route::post('/url', function (Request $request) {
     );
 });
 
+Route::get('/url_list/{id?}', function ($id = null) {
+    $host_selected = Host::find($id);
+    $urls = $host_selected->urls;
+    return view('urls/url_list',['urls' => $urls]);    
+});
+
 Route::delete('/url/{id}/{host_id}', function ($id, $host_id) {
     
     $url = Url::find($id);
@@ -185,8 +235,8 @@ Route::delete('/url/{id}/{host_id}', function ($id, $host_id) {
     );
 });
 
-Route::get('/url_list/{id?}', function ($id = null) {
-    $host_selected = Host::find($id);
-    $urls = $host_selected->urls;
-    return view('urls/url_list',['urls' => $urls]);    
+
+//juachaseadasssss....
+Route::get('/juancheo', function () {
+    echo '';
 });

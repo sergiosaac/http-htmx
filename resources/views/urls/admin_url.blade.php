@@ -8,11 +8,11 @@
 
             <label for="method">Method:</label>
             <select id="method" name="method">
-                <option value="post">POST</option>
-                <option value="get">GET</option>
-                <option value="put">PUT</option>
-                <option value="patch">PATCH</option>
-                <option value="delete">DELETE</option>
+                <option value="post">post</option>
+                <option value="get">get</option>
+                <option value="put">put</option>
+                <option value="patch">patch</option>
+                <option value="delete">delete</option>
             </select>
 
             <input type="text" name="url">

@@ -2,7 +2,7 @@
 
     <h2 style="color:#004d92;">URLs</h2>
 
-    <div style="opacity:0.8; background-color:#f8f8f8; padding:1px;" class="request-detail">
+    <div style="opacity:0.8; background-color:#f8f8f8; padding:1px;">
         <form action="/url/{{ $url['id'] }}" method="PATCH">
             <label for="campo4">Method:</label>
             <select id="opciones" name="method">

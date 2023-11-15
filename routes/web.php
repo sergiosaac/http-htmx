@@ -62,13 +62,17 @@ Route::post('/response', function (Request $request) {
             $response = Http::withHeaders(json_decode($request->header,true))->get($http['url']);
             break;
         case "post":
-            $response = Http::withHeaders(json_decode($request->header,true))->post($http['url'],json_decode($request->input,true));
+            if ($request->asform === 's') {
+                $response = Http::asForm()->post($http['url'],json_decode($request->input,true));
+            } else {
+                $response = Http::withHeaders(json_decode($request->header,true))->post($http['url'],json_decode($request->input,true));
+            }
             break;
         case "patch":
-            //$response = Http::withHeaders(json_decode($request->header,true))->patch($http['url'],json_decode($request->input,true));
+            $response = Http::withHeaders(json_decode($request->header,true))->patch($http['url'],json_decode($request->input,true));
             break;
         case "put":
-            //$response = Http::withHeaders(json_decode($request->header,true))->put($http['url'],json_decode($request->input,true));
+            $response = Http::withHeaders(json_decode($request->header,true))->put($http['url'],json_decode($request->input,true));
             break;
         case "delete":
             $response = Http::withHeaders(json_decode($request->header,true))->delete($http['url']);
@@ -165,6 +169,7 @@ Route::post('/xurls', function (Request $request) {
     $url->url = $request->url;
     $url->header = $request->header;
     $url->input = $request->input;
+    $url->asform = $request->asform;
     $url->host_id = $request->host_id;
     $url->save();
 
@@ -181,6 +186,7 @@ Route::patch('/xurls/{id}', function (Request $request, $id) {
     $url->url = $request->url;
     $url->header = $request->header;
     $url->input = $request->input;
+    $url->asform = $request->asform;
     $url->save();
     
     // wtf redirect

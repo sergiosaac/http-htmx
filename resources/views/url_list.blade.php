@@ -11,6 +11,7 @@
             <input type="hidden" name="url" value="{{ $url->url }}">
             <input type="hidden" name="header" value='{{ $url->header }}'>
             <input type="hidden" name="input" value="{{ $url->input }}">
+            <input type="hidden" name="asform" value="{{ $url->asform }}">
             
             @csrf
             

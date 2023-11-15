@@ -18,6 +18,12 @@
             <label for="campo3">Headers:</label>
             <textarea id="header" name="header">{{ $url['header'] }}</textarea>
 
+            <label for="asForm">As form (application/x-www-form-urlencoded) :</label>
+            <select id="asform" name="asform">
+                <option <?php if ($url['asform'] == 's') echo 'selected'; ?> value="s">Si</option>
+                <option <?php if ($url['asform'] == 'n') echo 'selected'; ?> value="n">No</option>
+            </select>
+
             <label for="campo3">Inputs:</label>
             <textarea id="input" name="input">{{ $url['input'] }}</textarea>
             

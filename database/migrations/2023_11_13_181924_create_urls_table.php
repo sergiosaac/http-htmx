@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('header');
             $table->string('input');
             $table->string('url');
+            $table->string('asform');
             $table->unsignedBigInteger('host_id');
             $table->foreign('host_id')->references('id')->on('hosts');
             $table->timestamps();

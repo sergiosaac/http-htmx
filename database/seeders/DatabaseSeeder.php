@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             'method' => 'get',
             'header' => '{"Accept":"application/json","Authorization":"Bearer 08oo6m3e9xhpChTgS1pMN2Y2gEOKhzNos3JpGq1h"}',
             'input' => '{}',
+            'asform' => 's',
             'url' => '/api/category',
             'host_id' => 1
         ]);
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
             'method' => 'get',
             'header' => '{"Accept":"application/json","Authorization":"Bearer 08oo6m3e9xhpChTgS1pMN2Y2gEOKhzNos3JpGq1h"}',
             'input' => '{}',
+            'asform' => 'n',
             'url' => '/api/category/2',
             'host_id' => 1
         ]);
@@ -48,6 +50,7 @@ class DatabaseSeeder extends Seeder
             'method' => 'get',
             'header' => '{"Accept":"application/json","Authorization":"Bearer 08oo6m3e9xhpChTgS1pMN2Y2gEOKhzNos3JpGq1h"}',
             'input' => '{}',
+            'asform' => 'n',
             'url' => '/api/servicio',
             'host_id' => 1
         ]);
@@ -56,6 +59,7 @@ class DatabaseSeeder extends Seeder
             'method' => 'get',
             'header' => '{"Accept":"application/json","Authorization":"Bearer 08oo6m3e9xhpChTgS1pMN2Y2gEOKhzNos3JpGq1"}',
             'input' => '{}',
+            'asform' => 'n',
             'url' => '/api/servicio',
             'host_id' => 1
         ]);
@@ -73,6 +77,7 @@ class DatabaseSeeder extends Seeder
             'method' => 'get',
             'header' => '{"Accept":"application/json"}',
             'input' => '{}',
+            'asform' => 's',
             'url' => '/login_mobile',
             'host_id' => 2
         ]);

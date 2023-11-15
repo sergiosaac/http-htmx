@@ -26,6 +26,12 @@
         <label for="header">Headers:</label>
         <textarea id="header" name="header"></textarea>
 
+        <label for="asForm">As form (application/x-www-form-urlencoded) :</label>
+        <select id="asform" name="asform">
+            <option value="s">Si</option>
+            <option value="n">No</option>
+        </select>
+
         <label for="input">Inputs:</label>
         <textarea id="input" name="input"></textarea>
 

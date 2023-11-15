@@ -4,7 +4,7 @@
 
         <form action="/response" method="POST">
             
-            <input type="hidden" name="protocolo" value="{{ $url->host->protocolo }}">
+            <!-- <input type="hidden" name="protocolo" value="{{ $url->host->protocolo }}">
             <input type="hidden" name="host" value="{{ $url->host->host }}">
             <input type="hidden" name="method" value="{{ $url->method }}">
             <input type="hidden" name="port" value="{{ $url->host->port }}">
@@ -13,11 +13,11 @@
             <input type="hidden" name="input" value="{{ $url->input }}">
             <input type="hidden" name="asform" value="{{ $url->asform }}">
             
-            @csrf
+            @csrf -->
             
             <a 
-                href="/servicios"
-                hx-post="/response" 
+                href="/servicios/{{ $url->id }}"
+                hx-get="/request/{{ $url->id }}" 
                 hx-target=".contenedor-azul">
                 <strong style="color:#004d92;">
                 {{ $url->method }}

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
@@ -43,6 +44,63 @@ Route::get('/http/{id?}', function (Request $request, $id = null) {
             'host_selected' => $host_selected
         ]
     );
+});
+
+Route::get('/request/{id}', function ($id) {
+
+    $url = Url::find($id);
+    $http = [];
+
+    if ($url->port == 80) {
+        $http['url'] = $url->host->protocolo.'://'.$url->host->host.$url->url;
+    } else {
+        $http['url'] = $url->host->protocolo.'://'.$url->host->host.':'.$url->host->port.$url->url;
+    }
+    
+    $http['method'] = strtolower($url->method);
+    $http['headers'] = json_decode($url->header,true);
+
+    switch ($http['method']) {
+        case "get":
+            $response = Http::withHeaders($http['headers'])->get($http['url']);
+            break;
+        case "post":
+            if ($url->asform === 's') {
+                $response = Http::asForm()
+                ->withHeaders($http['headers'])
+                ->post($http['url'],json_decode($url->input,true));
+            } else {
+                $response = Http::withHeaders($http['headers'])->post($http['url'],json_decode($url->input,true));
+            }
+            break;
+        case "patch":
+            $response = Http::withHeaders($http['headers'])->patch($http['url'],json_decode($url->input,true));
+            break;
+        case "put":
+            $response = Http::withHeaders($http['headers'])->put($http['url'],json_decode($url->input,true));
+            break;
+        case "delete":
+            $response = Http::withHeaders($http['headers'])->delete($http['url']);
+            break;
+        default:
+            echo "WTF";
+    }
+
+    $data = json_decode($response, true);
+
+    if ($data) {
+        $data = json_encode($data, JSON_PRETTY_PRINT);
+    } else {
+        $data = $response;
+    }
+    
+    return view(
+        'response',[
+        'method' => $http['method'],
+        'url' => $http['url'],
+        'response' => $response,
+        'body' => $data
+    ]);
 });
 
 Route::post('/response', function (Request $request) {

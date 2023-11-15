@@ -94,8 +94,7 @@ Route::post('/response', function (Request $request) {
     ]);
 });
 
-
-//resources
+//resources hosts
 Route::get('/xhosts', function () {
     
     $hosts = Host::all();
@@ -147,44 +146,18 @@ Route::get('/xhosts-create', function () {
     return view('hosts/create');
 });
 
-Route::get('/url/{id?}', function ($id = null) {
+//resources urls
+Route::get('/xurls', function () {
 
-    if ($id) {
-        $url = Url::find($id);
-        return view('urls/admin_url__update',
-            [
-                'url' => $url
-            ]);
-    }
+    return view('urls/urls',['urls' => Urls::all()]);
 });
 
-Route::get('/create_url/{id?}', function ($id = null) {
-
-    if ($id) {
-        $host = Host::find($id);
-        return view(
-            'urls/admin_url',
-            ['host' => $host]
-        );
-    }
-});
-
-Route::patch('/url/{id}', function (Request $request, $id) {
-
-    $url = Url::find($id);
+Route::get('/xurls/{id?}', function ($id) {
     
-    $url->method = strtolower($request->method);
-    $url->url = $request->url;
-    $url->header = $request->header;
-    $url->input = $request->input;
-    $url->save();
-    
-    $host_selected = Host::find($url->host->id);
-    $urls = $host_selected->urls;
-    return view('urls/url_list',['urls' => $urls]);
+    return view('urls/update',['url' => Url::find($id)]);
 });
 
-Route::post('/url', function (Request $request) {
+Route::post('/xurls', function (Request $request) {
 
     $url = new Url();
     
@@ -194,47 +167,41 @@ Route::post('/url', function (Request $request) {
     $url->input = $request->input;
     $url->host_id = $request->host_id;
     $url->save();
-    
-    // $host_selected = Host::find($url->host->id);
-    // $urls = $host_selected->urls;
-    // return view('url_list',['urls' => $urls]);
 
-    $host_selected = Host::find($request->host_id);
-    $urls = $host_selected->urls;
-    $hosts = Host::all();
-    
-    return view('http',
-        [
-            'urls' => $urls,
-            'hosts' => $hosts,
-            'host_selected' => $host_selected
-        ]
-    );
+    // wtf redirect
+    $host_id = $url->host->id;
+    return view('urls/urls',['urls' => Host::find($host_id)->urls]);
 });
 
-Route::get('/url_list/{id?}', function ($id = null) {
-    $host_selected = Host::find($id);
-    $urls = $host_selected->urls;
-    return view('urls/url_list',['urls' => $urls]);    
+Route::patch('/xurls/{id}', function (Request $request, $id) {
+
+    $url = Url::find($id);
+    
+    $url->method = strtolower($request->method);
+    $url->url = $request->url;
+    $url->header = $request->header;
+    $url->input = $request->input;
+    $url->save();
+    
+    // wtf redirect
+    $host_id = $url->host->id;
+    return view('urls/urls',['urls' => Host::find($host_id)->urls]);
 });
 
-Route::delete('/url/{id}/{host_id}', function ($id, $host_id) {
+Route::delete('/xurls/{id}', function ($id) {
     
     $url = Url::find($id);
+    $host_id = $url->host->id;
     $url->delete();
-    $host_selected = Host::find($host_id);
-    $urls = $host_selected->urls;
-    $hosts = Host::all();
     
-    return view('http',
-        [
-            'urls' => $urls,
-            'hosts' => $hosts,
-            'host_selected' => $host_selected
-        ]
-    );
+    // wtf redirect
+    return view('urls/urls',['urls' => Host::find($host_id)->urls]);
 });
 
+Route::get('/xurls-create/{host_id}', function ($host_id) {
+    
+    return view('urls/create',['host' => Host::find($host_id)]);
+});
 
 //juachaseadasssss....
 Route::get('/juancheo', function () {

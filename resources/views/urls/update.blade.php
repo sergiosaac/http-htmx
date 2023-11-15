@@ -1,9 +1,9 @@
-<div style="opacity:0.8; background-color:#f8f8f8; padding:25px;" id="admin_url">
+<div style="opacity:0.8; background-color:#f8f8f8; padding:25px;">
 
     <h2 style="color:#004d92;">URLs</h2>
 
     <div style="opacity:0.8; background-color:#f8f8f8; padding:1px;">
-        <form action="/url/{{ $url['id'] }}" method="PATCH">
+        <form action="/xurls/{{ $url['id'] }}" method="patch">
             <label for="campo4">Method:</label>
             <select id="opciones" name="method">
                 <option <?php if ($url['method'] == 'post') echo 'selected'; ?> value="post">post</option>
@@ -20,10 +20,11 @@
 
             <label for="campo3">Inputs:</label>
             <textarea id="input" name="input">{{ $url['input'] }}</textarea>
+            
             @csrf
 
             <button 
-                hx-patch="/url/{{ $url['id'] }}"
+                hx-patch="/xurls/{{ $url['id'] }}"
                 hx-target="#url_list"
                 class="adders">
                 guardar
@@ -31,12 +32,13 @@
 
             <button
                 class="adders"
-                hx-trigger="click" 
-                hx-get="/url_list/{{ $url['host']->id }}"
-                hx-target="#url_list">
+                hx-get="/juancheo"
+                hx-trigger="click"
+                hx-swap="innerHTML"
+                hx-target=".request-detail_{{ $url['id'] }}">
                 cerrar
             </button>
-        
+            
         </form>
     
     </div>

@@ -42,7 +42,7 @@
 
         <button 
             class="adders"
-            hx-get="/create_url/{{ $host_selected->id }}"
+            hx-get="/xurls-create/{{ $host_selected->id }}"
             hx-target=".contenedor-azul">
             + url
         </button>

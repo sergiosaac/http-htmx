@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
-
 use App\Models\Url;
 use App\Models\Host;
 
@@ -60,51 +59,61 @@ Route::get('/request/{id}', function ($id) {
     $http['method'] = strtolower($url->method);
     $http['headers'] = json_decode($url->header,true);
 
-    switch ($http['method']) {
-        case "get":
-            $response = Http::withHeaders($http['headers'])->get($http['url']);
-            break;
-        case "post":
-            if ($url->asform === 's') {
-                $response = Http::asForm()
-                ->withHeaders($http['headers'])
-                ->post($http['url'],json_decode($url->input,true));
-            } else {
-                $response = Http::withHeaders($http['headers'])->post($http['url'],json_decode($url->input,true));
-            }
-            break;
-        case "patch":
-            $response = Http::withHeaders($http['headers'])->patch($http['url'],json_decode($url->input,true));
-            break;
-        case "put":
-            $response = Http::withHeaders($http['headers'])->put($http['url'],json_decode($url->input,true));
-            break;
-        case "delete":
-            $response = Http::withHeaders($http['headers'])->delete($http['url']);
-            break;
-        default:
-            echo "WTF";
-    }
+    try {
 
-    //manejar sesion de cookies
-    if ($url->setcookie == 's') {
-        if (array_key_exists('Set-Cookie', $response->headers())) {
-            $ulrsSetCookie = Host::find($url->host->id);
-            foreach($ulrsSetCookie->urls as $url) {
-                $header = json_decode($url->header, true);
-                $header['Cookie']= $response->headers()['Set-Cookie'][0];
-                $url->header = json_encode($header);
-                $url->save();
+        switch ($http['method']) {
+            case "get":
+                $response = Http::withHeaders($http['headers'])->get($http['url']);
+                break;
+            case "post":
+                if ($url->asform === 's') {
+                    $response = Http::asForm()
+                    ->withHeaders($http['headers'])
+                    ->post($http['url'],json_decode($url->input,true));
+                } else {
+                    $response = Http::withHeaders($http['headers'])->post($http['url'],json_decode($url->input,true));
+                }
+                break;
+            case "patch":
+                $response = Http::withHeaders($http['headers'])->patch($http['url'],json_decode($url->input,true));
+                break;
+            case "put":
+                $response = Http::withHeaders($http['headers'])->put($http['url'],json_decode($url->input,true));
+                break;
+            case "delete":
+                $response = Http::withHeaders($http['headers'])->delete($http['url']);
+                break;
+            default:
+                echo "WTF";
+        }
+    
+        //manejar sesion de cookies
+        if ($url->setcookie == 's') {
+            if (array_key_exists('Set-Cookie', $response->headers())) {
+                $ulrsSetCookie = Host::find($url->host->id);
+                foreach($ulrsSetCookie->urls as $url) {
+                    if ($url->setcookie == 'n') {
+                        $header = json_decode($url->header, true);
+                        $header['Cookie']= $response->headers()['Set-Cookie'][0];
+                        $url->header = json_encode($header);
+                        $url->save();
+
+                    }
+                }
             }
         }
-    }
-
-    $data = json_decode($response, true);
-
-    if ($data) {
-        $data = json_encode($data, JSON_PRETTY_PRINT);
-    } else {
-        $data = $response;
+    
+        $data = json_decode($response, true);
+    
+        if ($data) {
+            $data = json_encode($data, JSON_PRETTY_PRINT);
+        } else {
+            $data = $response;
+        }
+        
+    } catch (\Exception $e) {
+        $response = false;
+        $data = $e->getMessage();
     }
     
     return view(

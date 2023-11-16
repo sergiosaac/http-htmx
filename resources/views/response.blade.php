@@ -11,7 +11,7 @@
             <li><strong> {{ $key }} </strong>: {{ $header[0] }} </li>
             @if($key === 'Set-Cookie')
                 <span style="font-size:12px; color:grey;">
-                    Para mantener sesion, agrega este key/value en tus headers.<br/>
+                    Quizás podrías usar sesion en este servicio, para eso podes agrega este key/value en tus headers.<br/>
                     <span style="color:#004d92 !important;font-size:12px" >
                             "Cookie" : "{{ $header[0] }}"
                     </span>

@@ -4,7 +4,7 @@
 
     <div style="opacity:0.8; background-color:#f8f8f8; padding:15px;">
 
-        <form action="/host" method="post">
+        <form action="/xhosts" method="post">
 
             <label for="method">Protocolo:</label>
             <select id="method" name="protocolo">
@@ -21,7 +21,7 @@
             @csrf
 
             <button 
-                hx-post="/xhost"
+                hx-post="/xhosts"
                 hx-target=".contenedor-azul"
                 class="adders">
                 guardar

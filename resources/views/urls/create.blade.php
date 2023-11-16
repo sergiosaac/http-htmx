@@ -24,16 +24,22 @@
         <input type="hidden" name="host_id" value="{{ $host['id'] }}">
 
         <label for="header">Headers:</label>
-        <textarea id="header" name="header"></textarea>
+        <textarea rows="7" cols="20" id="header" name="header"></textarea>
 
         <label for="asForm">As form (application/x-www-form-urlencoded) :</label>
         <select id="asform" name="asform">
-            <option value="s">Si</option>
             <option value="n">No</option>
+            <option value="s">Si</option>
+        </select>
+
+        <label for="asForm">SetCookie (si tengo que usar sesiones con cookies) :</label>
+        <select id="setcookie" name="setcookie">
+            <option value="n">No</option>
+            <option value="s">Si</option>
         </select>
 
         <label for="input">Inputs:</label>
-        <textarea id="input" name="input"></textarea>
+        <textarea rows="7" cols="20" id="input" name="input"></textarea>
 
         @csrf
 

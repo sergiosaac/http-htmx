@@ -16,7 +16,7 @@
             <input type="text" name="url" value="{{ $url['url'] }}">
 
             <label for="campo3">Headers:</label>
-            <textarea id="header" name="header">{{ $url['header'] }}</textarea>
+            <textarea rows="7" cols="20" id="header" name="header">{{ $url['header'] }}</textarea>
 
             <label for="asForm">As form (application/x-www-form-urlencoded) :</label>
             <select id="asform" name="asform">
@@ -24,8 +24,14 @@
                 <option <?php if ($url['asform'] == 'n') echo 'selected'; ?> value="n">No</option>
             </select>
 
+            <label for="asForm">SetCookie (si tengo que usar sesiones con cookies) :</label>
+            <select id="setcookie" name="setcookie">
+                <option <?php if ($url['setcookie'] == 's') echo 'selected'; ?> value="s">Si</option>
+                <option <?php if ($url['setcookie'] == 'n') echo 'selected'; ?> value="n">No</option>
+            </select>
+
             <label for="campo3">Inputs:</label>
-            <textarea id="input" name="input">{{ $url['input'] }}</textarea>
+            <textarea rows="7" cols="20" id="input" name="input">{{ $url['input'] }}</textarea>
             
             @csrf
 

@@ -1,3 +1,12 @@
+<style>
+.htmx-settling img {
+  opacity: 0;
+}
+img {
+ transition: opacity 300ms ease-in;
+ margin-bottom:-3px;
+}
+</style>
 @foreach ($urls as $url)
 
     <div class="request">
@@ -16,9 +25,11 @@
             @csrf -->
             
             <a 
+                class="fade-me-out"    
                 href="/servicios/{{ $url->id }}"
                 hx-get="/request/{{ $url->id }}" 
                 hx-target=".contenedor-azul">
+                <img alt="Result loading..." class="htmx-indicator" width="15" height="15" src="Iphone-spinner-2.gif"/>
                 <strong style="color:#004d92;">
                 {{ $url->method }}
                 </strong>
@@ -26,6 +37,10 @@
             </a>
 
         </form>
+
+        @if ($url->setcookie === 's')
+        <span style="opacity:0.3;color:black;margin-left:-2px;" class="edit">setCookie</span>
+        @endif
         
         <span 
             class="edit"

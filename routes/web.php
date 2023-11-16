@@ -86,6 +86,19 @@ Route::get('/request/{id}', function ($id) {
             echo "WTF";
     }
 
+    //manejar sesion de cookies
+    if ($url->setcookie == 's') {
+        if (array_key_exists('Set-Cookie', $response->headers())) {
+            $ulrsSetCookie = Host::find($url->host->id);
+            foreach($ulrsSetCookie->urls as $url) {
+                $header = json_decode($url->header, true);
+                $header['Cookie']= $response->headers()['Set-Cookie'][0];
+                $url->header = json_encode($header);
+                $url->save();
+            }
+        }
+    }
+
     $data = json_decode($response, true);
 
     if ($data) {
@@ -168,7 +181,7 @@ Route::get('/xhosts/{id}', function ($id) {
     return view('hosts/update',['host' => Host::find($id)]);
 });
 
-Route::post('/xhost', function (Request $request) {
+Route::post('/xhosts', function (Request $request) {
     
     $host = new Host();
     $host->protocolo = $request->protocolo;
@@ -229,6 +242,7 @@ Route::post('/xurls', function (Request $request) {
     $url->input = $request->input;
     $url->asform = $request->asform;
     $url->host_id = $request->host_id;
+    $url->setcookie = $request->setcookie;
     $url->save();
 
     // wtf redirect
@@ -245,6 +259,7 @@ Route::patch('/xurls/{id}', function (Request $request, $id) {
     $url->header = $request->header;
     $url->input = $request->input;
     $url->asform = $request->asform;
+    $url->setcookie = $request->setcookie;
     $url->save();
     
     // wtf redirect

@@ -13,9 +13,18 @@
     @foreach($hosts as $host)
         
         <p class="host_list">
-            <strong>
-                {{ $host->host_print() }}
-            </strong>
+            <a 
+                style="text-decoration:none; color:#004d92 !important;"
+                href="/http/{{ $host->id }}"
+                hx-trigger="click"
+                hx-get="/http/{{ $host->id }}"
+                hx-swap="outerHTML"
+                hx-target="body">
+                <strong>
+                    {{ $host->host_print() }}
+                </strong>
+            </a>
+            
             <span 
                 class="edit"
                 hx-get="/xhosts/{{ $host->id }}"

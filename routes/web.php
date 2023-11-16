@@ -59,6 +59,8 @@ Route::get('/request/{id}', function ($id) {
     $http['method'] = strtolower($url->method);
     $http['headers'] = json_decode($url->header,true);
 
+    $execution_time = 0;
+
     try {
 
         $start_time = microtime(true);

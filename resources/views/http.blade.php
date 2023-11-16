@@ -17,7 +17,7 @@
             <strong style="color:black; font-size:13px;" >
                 for 
                 <span 
-                    hx-trigger="click" 
+                    hx-trigger="click"
                     hx-get="/http/{{ $host_selected->id }}"
                     hx-swap="outerHTML"
                     hx-target="body"

@@ -13,6 +13,7 @@
                 <option <?php if ($url['method'] == 'delete') echo 'selected'; ?> value="DELETE">delete</option>
             </select>
 
+            <label for="method">Url:</label>
             <input type="text" name="url" value="{{ $url['url'] }}">
 
             <label for="campo3">Headers:</label>
@@ -24,7 +25,7 @@
                 <option <?php if ($url['asform'] == 'n') echo 'selected'; ?> value="n">No</option>
             </select>
 
-            <label for="asForm">SetCookie (si tengo que usar sesiones con cookies) :</label>
+            <label for="asForm">SetCookie (si tengo que usar sesiones con cookies, afecta todas las urls del host):</label>
             <select id="setcookie" name="setcookie">
                 <option <?php if ($url['setcookie'] == 's') echo 'selected'; ?> value="s">Si</option>
                 <option <?php if ($url['setcookie'] == 'n') echo 'selected'; ?> value="n">No</option>

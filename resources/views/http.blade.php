@@ -57,6 +57,9 @@
 
     <div class="contenedor-azul">
     </div>
+    
+    <div class="error">
+    </div>
 
 </body>
 </html>

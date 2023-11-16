@@ -20,6 +20,7 @@
             <option value="delete">delete</option>
         </select>
 
+        <label for="method">Url:</label>
         <input type="text" name="url">
         <input type="hidden" name="host_id" value="{{ $host['id'] }}">
 
@@ -32,7 +33,7 @@
             <option value="s">Si</option>
         </select>
 
-        <label for="asForm">SetCookie (si tengo que usar sesiones con cookies) :</label>
+        <label for="asForm">SetCookie (si tengo que usar sesiones con cookies, afecta todas las urls del host):</label>
         <select id="setcookie" name="setcookie">
             <option value="n">No</option>
             <option value="s">Si</option>

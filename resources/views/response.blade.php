@@ -6,6 +6,8 @@
 
     @if($response)
 
+        
+
         <ul style="list-style-type: none; padding: 0;">
             
             <li><strong>Status:</strong> {{ $response->status() }} </li>
@@ -22,8 +24,9 @@
                     <br/>
                 @endif
             @endforeach
-
         </ul>
+
+        <strong>Time </strong> : {{ $execution_time_print }} <br/>
 
         <strong>Body: </strong>
         

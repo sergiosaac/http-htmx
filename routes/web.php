@@ -61,6 +61,8 @@ Route::get('/request/{id}', function ($id) {
 
     try {
 
+        $start_time = microtime(true);
+
         switch ($http['method']) {
             case "get":
                 $response = Http::withHeaders($http['headers'])->get($http['url']);
@@ -86,6 +88,9 @@ Route::get('/request/{id}', function ($id) {
             default:
                 echo "WTF";
         }
+
+        $end_time = microtime(true);
+        $execution_time = $end_time - $start_time;
     
         //manejar sesion de cookies
         if ($url->setcookie == 's') {
@@ -121,6 +126,7 @@ Route::get('/request/{id}', function ($id) {
         'method' => $http['method'],
         'url' => $http['url'],
         'response' => $response,
+        'execution_time_print' => round($execution_time * 1000).'ms',
         'body' => $data
     ]);
 });

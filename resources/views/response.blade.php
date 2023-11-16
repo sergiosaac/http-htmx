@@ -3,10 +3,12 @@
     <h2 style="color:#004d92;" >RESPONSE</h2>
 
     <strong style="color:blue" > {{ strtoupper($method) }} - {{ $url }} </strong>
+    <br/>
+    <span style="font-size:12px;">
+        Time: {{ $execution_time_print }}
+    </span>
 
     @if($response)
-
-        
 
         <ul style="list-style-type: none; padding: 0;">
             
@@ -25,8 +27,6 @@
                 @endif
             @endforeach
         </ul>
-
-        <strong>Time </strong> : {{ $execution_time_print }} <br/>
 
         <strong>Body: </strong>
         

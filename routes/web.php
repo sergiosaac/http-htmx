@@ -113,7 +113,7 @@ Route::get('/request/{id}', function ($id) {
         $data = json_decode($response, true);
     
         if ($data) {
-            $data = json_encode($data, JSON_PRETTY_PRINT);
+            $data = json_encode($data,  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         } else {
             $data = $response;
         }
